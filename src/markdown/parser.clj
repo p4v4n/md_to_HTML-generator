@@ -51,7 +51,7 @@
 
 
 (defn para_line_break_parser [data]
-	(if (re-find #"^ {2,}\n" data)
+	(if (re-find #"^( {2,}|\\)\n" data)
 		(let [[a b] (split data #"\n" 2)]
 			(list (hash-map :tag "linebreak",:content "<br />") b))))
 
