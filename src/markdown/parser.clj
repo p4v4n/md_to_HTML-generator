@@ -27,18 +27,31 @@
 				(list (hash-map :tag "reference-link" :content (subs a 1) :id (subs c 1)) d))
 			(starts-with? b ":")
 			(let [[c d] (split b #"\n" 2)]
-				(list (hash-map :tag "link-reference" :content (subs a 1) :url (subs c 1)) d))))))
+			   (if (ends-with? c "\"")
+				(let [[e f g] (split c #"\"" 3)]
+				(list (hash-map :tag "link-reference" :content (subs a 1) :url (subs e 1 (- (count e) 1)) :title f) d))	
+				(list (hash-map :tag "link-reference" :content (subs a 1) :url (subs c 1)) d)))))))
+
 
 (defn image_parser [data]
 	(if (starts-with? data "![")
-		(let [[a b] (split data #"\)" 2)
-			  [c d] (split a #"]" 2)
-			]
-			(if (ends-with? d "\"")
-				(let [[e f g] (split d #"\"" 3)]
-					(list (hash-map :tag "image" :content (subs c 2) :path (subs e 1 (- (count e) 1)) :title f) b)
-					)
-			(list (hash-map :tag "image" :content (subs c 2) :path (subs d 1)) b)))))
+		(let [[a b] (split data #"]" 2)]
+		  (cond
+		    (starts-with? b "(")
+		    (let [[c d] (split b #"\)" 2)]
+		    	(if (ends-with? c "\"")
+				(let [[e f g] (split c #"\"" 3)]
+					(list (hash-map :tag "image" :content (subs a 2) :path (subs e 1 (- (count e) 1)) :title f) d))
+			        (list (hash-map :tag "image" :content (subs a 2) :path (subs c 1)) d)))
+			(starts-with? b "[")
+			(let [[c d] (split b #"]" 2)]
+				(list (hash-map :tag "reference-image" :content (subs a 2) :id (subs c 1)) d))
+			(starts-with? b ":")
+			(let [[c d] (split b #"\n" 2)]
+			   (if (ends-with? c "\"")
+				(let [[e f g] (split c #"\"" 3)]
+				(list (hash-map :tag "image-reference" :content (subs a 2) :path (subs e 1 (- (count e) 1)) :title f) d))	
+				(list (hash-map :tag "image-reference" :content (subs a 2) :path (subs c 1)) d)))))))
 
 
 (defn emphasis_parser [data]

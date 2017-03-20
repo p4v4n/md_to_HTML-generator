@@ -12,6 +12,14 @@
 		(ref_link_helper a (rest b))
 		)))
 
+(defn ref_image_helper [a b]
+	(if (empty? b)
+		"Hello"
+	(if (= (:tag (first b)) "image-reference")
+		(if (= (:content (first b)) a) (:path (first b)) (ref_image_helper a (rest b)))
+		(ref_image_helper a (rest b))
+		)))
+
 
 (defn converter [input]
 	(let [t (:tag input)]
@@ -20,8 +28,9 @@
 			(= t "link") (str "<a href = \"" (:url input) "\">" (:content input) "</a>")
 			(= t "reference-link") (str "<a href = \"" (ref_link_helper (:id input) tree) "\">" (:content input) "</a>")
 			(= t "image") (str "<img src = \"" (:path input) "\" alt = \"" (:content input) "\" >" )
+			(= t "reference-image") (str "<img src = \"" (ref_image_helper (:id input) tree) "\" alt = \"" (:content input) "\" >" )
 			(= t "code_block") (str "<pre><code>" (:content input) "</code></pre>")
-			(= t "link-reference") nil
+			(or (= t "link-reference") (= t "image-reference")) nil
 			(or (= t "text") (= t "linebreak") (= t "hr")) (str (:content input))
 			:else (str "<" t ">" (:content input) "</" t ">"))
 		(str "<" t ">" (reduce str (map converter (:content input))) "</" t ">"))))

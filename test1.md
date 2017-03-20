@@ -11,7 +11,9 @@
 Different Heading
  ================
 
-Paragraphs are separated\
+![image1][path1]
+
+Paragraphs [are][id1] separated\
 by a blank line.
 
 Text attributes _italic_, *italic*, __bold__, **bold**.
@@ -24,6 +26,7 @@ Text attributes _italic_, *italic*, __bold__, **bold**.
 
 >Want to become a better programmer? Sign up at [geekskool](http://www.geekskool.com).
 
+![image2][path1]
 
 Bullet list:
 
@@ -39,4 +42,5 @@ Numbered list:
 
 A ![space](bootstrap.gif).
 
-[id1]:http://google.com/
+[id1]:http://google.com/ "title"
+![path1]:12friedman-master768-v4.gif
