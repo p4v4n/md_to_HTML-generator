@@ -40,7 +40,7 @@ Numbered list:
   2. oranges
   3. pears
 
-A ![space](bootstrap.gif).
+A ![space](resources/bootstrap.gif).
 
 [id1]:http://google.com/ "title"
-![path1]:12friedman-master768-v4.gif
+![path1]:resources/12friedman-master768-v4.gif
