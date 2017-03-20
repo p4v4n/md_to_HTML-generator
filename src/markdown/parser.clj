@@ -14,15 +14,20 @@
 
 (defn link_parser [data]
 	(if (starts-with? data "[")
-		(let [[a b] (split data #"\)" 2)
-			  [c d] (split a #"]" 2)
-			]
-			(if (ends-with? d "\"")
-				(let [[e f g] (split d #"\"" 3)]
-					(list (hash-map :tag "link" :content (subs c 1) :url (subs e 1 (- (count e) 1)) :title f) b)
-					)
-			(list (hash-map :tag "link" :content (subs c 1) :url (subs d 1)) b)))))
-
+		(let [[a b] (split data #"]" 2)]
+		  (cond
+		    (starts-with? b "(")
+		    (let [[c d] (split b #"\)" 2)]
+		    	(if (ends-with? c "\"")
+				(let [[e f g] (split c #"\"" 3)]
+					(list (hash-map :tag "link" :content (subs a 1) :url (subs e 1 (- (count e) 1)) :title f) d))
+			        (list (hash-map :tag "link" :content (subs a 1) :url (subs c 1)) d)))
+			(starts-with? b "[")
+			(let [[c d] (split b #"]" 2)]
+				(list (hash-map :tag "reference-link" :content (subs a 1) :id (subs c 1)) d))
+			(starts-with? b ":")
+			(let [[c d] (split b #"\n" 2)]
+				(list (hash-map :tag "link-reference" :content (subs a 1) :url (subs c 1)) d))))))
 
 (defn image_parser [data]
 	(if (starts-with? data "![")
@@ -78,10 +83,11 @@
 		(let [[a b] (split data #"\n" 2)
 			  [c d] (split a #" " 2)]
 			   (list (hash-map :tag (str "h" (str (count c))),:content (tag_parser (trim (replace (subs a (+ 1 (count c))) "#" "")))) b))
-		(let [[a b c] (split data #"\n" 3)]
+		(if (= 3 (count (split data #"\n" 3)))
+		 (let [[a b c] (split data #"\n" 3)]
 			(cond (= (set (trim b)) #{\=}) (list (hash-map :tag "h1",:content (tag_parser (trim a))) c)
 				(= (set (trim b)) #{\-}) (list (hash-map :tag "h2",:content (tag_parser (trim a))) c)
-				))))
+				)))))
 
 
 (defn paragraph_parser [data]

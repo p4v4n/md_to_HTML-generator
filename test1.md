@@ -1,15 +1,17 @@
 # Heading 1 _is_ a [google link](http://www.google.com).
 
+# Heading 2 is a [another google link][id1].
+
 ## Sub-heading ##
 
 *************************
 
 ### Another deeper heading
 
-Different Heading   
+Different Heading
  ================
 
-Paragraphs are separated    
+Paragraphs are separated\
 by a blank line.
 
 Text attributes _italic_, *italic*, __bold__, **bold**.
@@ -36,3 +38,5 @@ Numbered list:
   3. pears
 
 A ![space](bootstrap.gif).
+
+[id1]:http://google.com/
