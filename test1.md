@@ -6,7 +6,7 @@
 
 *************************
 
-### Another deeper heading
+### Another ~~deeper~~ heading
 
 Different Heading
  ================

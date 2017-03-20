@@ -59,7 +59,8 @@
 		(starts-with? data "**") (let [[a b c] (split data #"\*\*" 3)] (list (hash-map :tag "strong" :content b) c))
 		(starts-with? data "__") (let [[a b c] (split data #"__" 3)] (list (hash-map :tag "strong" :content b) c))
 		(starts-with? data "*") (let [[a b c] (split data #"\*" 3)] (list (hash-map :tag "em" :content b) c))
-		(starts-with? data "_") (let [[a b c] (split data #"_" 3)] (list (hash-map :tag "em" :content b) c))))
+		(starts-with? data "_") (let [[a b c] (split data #"_" 3)] (list (hash-map :tag "em" :content b) c))
+		(starts-with? data "~~") (let [[a b c] (split data #"~~" 3)] (list (hash-map :tag "strike" :content b) c))))
 
 
 (defn line_break_parser [data]
@@ -78,7 +79,6 @@
 	(if (starts-with? data "`")
 		(let [[a b c] (split data #"`" 3)]
 			(list (hash-map :tag "code",:content b) c))))
-
 
 
 (def span_parser (any_one_parser_factory text_parser link_parser image_parser emphasis_parser line_break_parser para_line_break_parser code_parser))
